@@ -22,7 +22,7 @@ const Header = () => {
 		<nav id="nav-bar">
 		<img src={logo}/>
 			<ul>
-				<li><a classNa	me={styles['nav-link']} href="#speed">HOME</a></li>
+				<li><a className={styles['nav-link']} href="#speed">HOME</a></li>
 				<li><a className={styles['nav-link']} href="#display">APPOINTMENTS</a></li>
 				<li><a className={styles['nav-link']} href="#camera">SERVICES</a></li>
 				<li><a className={styles['nav-link']} href="#design">BLOG</a></li>

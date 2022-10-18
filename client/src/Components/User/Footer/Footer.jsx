@@ -18,7 +18,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div class="col-xs-6 col-md-3">
+          <div className="col-xs-6 col-md-3">
             <h6>Quick Links</h6>
             <ul className={styles['footer-links']}>
               <li><a href="">Book Your Appointments</a></li>
@@ -27,7 +27,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div class="col-xs-6 col-md-3">
+          <div className="col-xs-6 col-md-3">
             <h6>Recent Blogs</h6>
             <ul className={styles['footer-links']}>
               <li><a href="">Safe pet grooming - september 9,2022</a></li>

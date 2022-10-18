@@ -1,21 +1,38 @@
 import React from "react";
 import Layout from "./Components/User/Layout/Layout";
-import Header from "./Components/User/Header/Header";
-// import logo from './Assests/Unleash+logo.png'
-// import logo from '../public/Assests/Unleash+logo.png'
+import {
+  Routes,
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
+import LoginPage from "./Pages/LoginPage";
+import SignUp from "./Pages/SignUp";
+import Homepage from "./Components/User/HomePage/Homepage";
+import ErrorPage from "./Pages/ErrorPage";
 
-import Authentication from "./Components/User/Login_Signup/Authentication";
-
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />} errorElement={<ErrorPage />}>
+      <Route index element={<Homepage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="signup" element={<SignUp />} />
+    </Route>
+  )
+);
 function App() {
-  return (
-    <div>
-      <Layout>
-        <Authentication />
-        
-        
-      </Layout>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
+
+// <Layout>
+//   <Routes>
+//     <Route path="/" element={<Homepage/>}/>
+//       {/* <Route index element={<Homepage/>}/> */}
+//       <Route path="login" element={<LoginPage/>}/>
+//       <Route path="signup" element={<SignUp/>}/>
+//       <Route path="*" element={<ErrorPage/>}/>
+//   </Routes>
+//   </Layout>
