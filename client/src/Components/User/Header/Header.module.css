@@ -1,0 +1,170 @@
+
+@import url('https://fonts.googleapis.com/css?family=Comfortaa|Open+Sans:300,400,600,700');
+
+
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+
+header {
+	width: 100%;
+	padding: 20px 0px;
+	border-bottom: 1px solid #ffffff;
+	background-color: #EAB10A;
+	position: relative; 
+	top: 0;
+	transition: all 0.25s ease;
+	z-index: 3;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	flex-wrap: wrap;
+}
+
+header img {
+	height: 35px;
+	/* padding-top: 30px; */
+}
+
+@media (max-width: 330px) {
+	header img {
+		display: none;
+	}
+}
+
+header h4 {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #2c2d2f;
+	margin-left: 185px;
+}
+
+@media (max-width: 600px) {
+	h1 {
+		display: none;
+	}
+}
+
+/* header .header-top {
+	background-color: #828282;
+} */
+
+header .user-details span {
+	margin-left: 30px;
+	font-size: 1.2rem;
+	color: #2c2d2f;
+	padding: 0 15px 10px 15px;
+}
+
+header .user-details span:hover {
+	color: #101920;
+	border-bottom: 2px solid #101920;
+	cursor: pointer;
+}
+
+nav {
+	padding: 25px 25px 25px 25px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background-color: white;
+}
+
+nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 5px auto;
+	font-weight:900;
+}
+
+@media (max-width: 600px) {
+	nav ul {
+		margin: unset;
+		display: unset;
+		position: relative;
+		right: 30px;
+	}
+}
+
+nav li {
+	list-style-type: none;
+}
+
+nav li a {
+	margin: 0 15px;
+	padding: 10px 5px 15px 5px;
+	color: #828282;
+	text-transform: uppercase;
+	letter-spacing: 0.05rem;
+	font-size: 0.8rem;
+}
+
+nav li a:hover {
+	color: #EAB10A;
+	border-bottom: 2px solid #EAB10A;
+}
+
+
+@media (max-width: 1000px) {
+	nav li a {
+		padding-bottom: 0px;
+	}
+}
+
+/* nav button {
+ remove default styling*/
+	/*outline: none;
+	border: none;
+	box-shadow: none;
+
+	min-width: 110px;
+	height: 50px;
+	background: #EB0028;
+	color: white;
+	font-size: 0.9rem;
+	border-radius: 2px;
+	position: relative;
+	z-index: 1;
+}
+
+nav button span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 2px;
+	background: #CE0024;
+	height: 100%;
+	z-index: -1;
+
+	javascript used for animation-name setting>>
+	animation-duration: 0.5s;
+	animation-fill-mode: forwards;
+}
+
+nav button:hover {
+	cursor: pointer;
+}
+
+@keyframes buttonEffect {
+	0% {
+		width: 0px;
+	}
+	100% {
+		width: 100%;
+	}
+}
+
+@keyframes buttonEffectRemoval {
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0px;
+	}
+}
+ */
