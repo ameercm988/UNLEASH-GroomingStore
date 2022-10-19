@@ -3,7 +3,8 @@ import { AiFillWarning } from "react-icons/ai";
 import Authentication from "../Components/User/Login_Signup/Authentication";
 import signUpPic from "../Assets/signup image.jpg";
 import "../Components/User/Login_Signup/Authentication.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 //In signup i used useReducer
 
@@ -20,24 +21,26 @@ const welcomeNote = (
     <h4>What took you so long! </h4>
   </>
 );
-const onGoogleLogin = async (data) => {
-  console.log(data, "datafromsignup");
-  try {
-    const body = { googleCredentials: data?.credential };
-    const res = await fetch("/api/users/signup", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    });
-    const resData = await res.json();
-    console.log(resData);
-  } catch (error) {
-    alert("failed to fetch");
-  }
-};
+// const onGoogleLogin = async (data) => {
+//   // console.log(data, "datafromsignup");
+//   try {
+//     const body = { googleCredentials: data?.credential };
+//     const res = await fetch("/api/users/signup", {
+//       method: "POST",
+//       body: JSON.stringify(body),
+//       headers: { "Content-Type": "application/json" },
+//     });
+//     const resData = await res.json();
+//     toast(resData);
+//     console.log(resData);
+//   } catch (error) {
+//     // alert("failed to fetch");
+//     toast.error("failed to fetch");
+//   }
+// };
 
 const reducerFunction = (state, action) => {
-  console.log(state, action);
+  // console.log(state, action);
   switch (action.type) {
     case "F_NAME_ERR":
       return { ...state, firstname: true };
@@ -65,12 +68,13 @@ const reducerFunction = (state, action) => {
       return { ...state, confirmpassword: false };
 
     default:
-      alert("oodiko");
+      toast("oodiko");
       return;
   }
 };
 
 const SignUp = () => {
+  const navigate = useNavigate()
   const initialState = {
     firstname: "",
     lastname: "",
@@ -134,18 +138,45 @@ const SignUp = () => {
     else if (inputs.lastname === "") dispatch({ type: "L_NAME_ERR" });
     else if (inputs.email === "") dispatch({ type: "EMAIL_ERROR" });
     else if (inputs.password === "") dispatch({ type: "PASSWORD_ERR" });
-    // else if ( inputs.confirmpassword === "") dispatch({type : "C_PASSWORD_ERR"})
-    else alert("signed up succesfully");
-//       >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    else if (inputs.confirmpassword === "")
+      dispatch({ type: "C_PASSWORD_ERR" });
+    else console.log("form data validated");
+
     try {
-      const userData = JSON.stringify(inputs);
-      const res = await fetch("/api/users/signup", {
-        method: "POST",
-        body: userData,
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (error) {}
+      if (
+        !inputs.firstname ||
+        !inputs.lastname ||
+        !inputs.email ||
+        !inputs.password
+      ) {
+        toast("Please fill all the fields");
+      } else {
+        
+        const userData = JSON.stringify(inputs);
+        const res = await fetch("/api/users/signup", {
+          method: "POST",
+          body: userData,
+          headers: { "Content-Type": "application/json" },
+        });
+        let resData = await res.json();
+        toast(resData, {
+          position: toast.POSITION.TOP_RIGHT,
+          className:"toast-message"
+        });
+        console.log(resData, "resssssdaaattaaaa");
+        setInputs(initialState);
+        if(res.ok){
+          navigate('/login', {replace : true})
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+      toast.error(error);
+    }
   };
+
+  // let formValid = false
 
   return (
     <Authentication
@@ -153,7 +184,7 @@ const SignUp = () => {
       style={style}
       img={signUpPic}
       welcomeNote={welcomeNote}
-      onGoogleLogin={onGoogleLogin}
+      // onGoogleLogin={onGoogleLogin}
     >
       <form onSubmit={submitHandler}>
         <div className="input_text">
@@ -164,6 +195,7 @@ const SignUp = () => {
             name="firstname"
             value={inputs.firstname}
             onChange={inputEvent}
+            // required={true}
           />
           <p className={`${!state.firstname ? "danger" : ""}`}>
             <AiFillWarning className="fa fa-warning" />
@@ -192,7 +224,7 @@ const SignUp = () => {
             type="text"
             placeholder="Enter email"
             name="email"
-            // value={inputs.email}
+            value={inputs.email}
             onChange={inputEvent}
           />
           <p className={`${!state.email ? "danger" : ""}`}>

@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "./Components/User/Layout/Layout";
 import {
-  Routes,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
@@ -11,6 +10,7 @@ import LoginPage from "./Pages/LoginPage";
 import SignUp from "./Pages/SignUp";
 import Homepage from "./Components/User/HomePage/Homepage";
 import ErrorPage from "./Pages/ErrorPage";
+import EmailVerification from "./Pages/EmailVerification";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +18,8 @@ const router = createBrowserRouter(
       <Route index element={<Homepage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="signup" element={<SignUp />} />
+      <Route path="verify/:token" element={<EmailVerification />} />
+
     </Route>
   )
 );

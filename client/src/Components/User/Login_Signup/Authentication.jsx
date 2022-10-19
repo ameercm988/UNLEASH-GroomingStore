@@ -31,7 +31,7 @@ const Authentication = (props) => {
                 <p>or signin with</p>
               </div>
               <div className="boxes">
-                <i><GoogleAuth onSuccess={props.onGoogleLogin}/></i>
+                <i><GoogleAuth /></i>
                 {/* <span>
 
                   <img src="https://imgur.com/XnY9cKl.png" alt=""/>

@@ -1,28 +1,37 @@
 import React, { useState } from "react";
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
 import Authentication from "../Components/User/Login_Signup/Authentication";
 import loginPic from "../Assets/woman-cuddling-with-her-dog.jpeg";
 import "../Components/User/Login_Signup/Authentication.css";
+import { toast } from "react-toastify";
 
 //In login i used useState
 
 // dynamicProps
-const authTitle = <p>Not a member? <Link to="/signup">Register Now</Link></p>
-const style = { height: "500px", width: "800px" }
-const welcomeNote =  <><h2>Hello Again!</h2><h4>Welcome back you have been missed! </h4></>
-
-const onGoogleLogin = (data) => {
-  console.log(data)
-}
-
+const authTitle = (
+  <p>
+    Not a member? <Link to="/signup">Register Now</Link>
+  </p>
+);
+const style = { height: "500px", width: "800px" };
+const welcomeNote = (
+  <>
+    <h2>Hello Again!</h2>
+    <h4>Welcome back you have been missed! </h4>
+  </>
+);
 
 const LoginPage = () => {
-  const [inputs, setinputs] = useState({
+  const navigate = useNavigate();
+
+  const initialState = {
     email: "",
     password: "",
-  });
+  }
+
+  const [inputs, setinputs] = useState(initialState);
 
   const [warnemail, setwarnemail] = useState(false);
   const [warnpass, setwarnpass] = useState(false);
@@ -34,7 +43,7 @@ const LoginPage = () => {
   const inputEvent = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(value);
+    // console.log(value);
     if (name === "email") {
       value.length > 3 && value.includes("@")
         ? setdanger(true)
@@ -48,13 +57,14 @@ const LoginPage = () => {
     });
   };
 
-  const submitForm = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+
     setwarnemail(false);
     setwarnpass(false);
-    console.log(inputs.email.includes("@"), inputs.email.length < 1);
+    // console.log(inputs.email.includes("@"), inputs.email.length < 1);
     if (!inputs.email.includes("@") || inputs.email.length < 3) {
-      console.log("first");
+      // console.log("first");
       setdanger(false);
       return;
     }
@@ -64,9 +74,33 @@ const LoginPage = () => {
       setwarnpass(true);
     } else {
       setdanger(true);
-      alert("Logged in Successfully");
+      // alert("Logged in Successfully");
+    }
+
+    try {
+      if (!inputs.email || !inputs.password) {
+        toast("Fill the required fields");
+      } else {
+        const userData = JSON.stringify(inputs);
+        const res = await fetch("/api/users/login", {
+          method: "POST",
+          body: userData,
+          headers: { "Content-Type": "application/json" },
+        });
+        const response = await res.json();
+        toast(response);
+        console.log(response);
+        setinputs(initialState)
+        console.log(res.ok);
+        if (res.ok) {
+          navigate("/", { replace: true });
+        }
+      }
+    } catch (error) {
+      toast(error);
     }
   };
+
   const Eye = () => {
     if (pass === "password") {
       setpass("text");
@@ -79,14 +113,12 @@ const LoginPage = () => {
 
   return (
     <Authentication
-      authTitle = {authTitle}
-      style = {style}
+      authTitle={authTitle}
+      style={style}
       img={loginPic}
-      welcomeNote = {welcomeNote}
-      onGoogleLogin = {onGoogleLogin}
-
+      welcomeNote={welcomeNote}
     >
-      <form onSubmit={submitForm}>
+      <form onSubmit={submitHandler}>
         <div className="input_text">
           <input
             className={` ${warnemail ? "warning" : ""}`}

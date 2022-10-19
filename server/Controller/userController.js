@@ -1,67 +1,204 @@
-const userModel = require('../Model/userModel')
-const bcrypt = require('bcryptjs')
-const googleAuth = require('google-auth-library')
+const userModel = require("../Model/userModel");
+const bcrypt = require("bcryptjs");
+const googleAuth = require("google-auth-library");
+const nodeMail = require("../Config/nodeMailer");
+const { verify, sign } = require("jsonwebtoken");
 
 
-module.exports = {
 
-    signup : async (req, res, next) => {
-        console.log(req.body,'reqbodyfromserver')
-        try {
-            const token = req?.body?.googleCredentials   //optional chaining
-            if(token){
-                const client = new googleAuth.OAuth2Client(process.env.GOOGLECLIENTID)
-                const userData = await client.verifyIdToken({idToken : token, audience : process.env.GOOGLECLIENTID})
-                console.log(userData);
+const tokenGenerator = (res, userData) => {
+  let jwtKey = process.env.JWT_SECRET_KEY;
+            let data = userData?.email;
 
-                const {given_name : firstname, family_name : lastname, email, email_verified : emailverified} = userData?.payload
-                const user = await userModel.findOne({email})
-                if(user){
-                    res.status(403).json('user exist')
-                    // throw new Error('user already exists')
-                    // throw {status : 403,message : 'user already exists'}   //throwing error to catch block
-                } else {
-                    userModel.create({firstname,lastname,email,emailverified}).then((response) => {res.status(201).json('user created')})
-                    
-                }
-
-            } else {
-                const {firstname, lastname, email, password} = req.body
-                const user = await userModel.create({firstname, lastname, email, password})
-                res.status(200).json({user : user_id, created : true})
-            }
-        } catch (error) {
-            const statuscode = res.status ? res.status : 500
-
-            res.status(statuscode).json(error.message)
-        }
-    },
-
-    login : async (req, res, next) => {
-        try {
-           const {email, password} = req.body
-           const user = await userModel.find(email)
-        } catch (error) {
-            
-        }
-    }
+            const token = sign({ data }, jwtKey, {
+              expiresIn: 60 * 60 * 24 * 1000,
+            });
+            res
+              .cookie("access_token", token, {
+                httpOnly: true,
+                withCredentials: true,
+                sameSite: "lax",
+                expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+                // secure : process.env.JWT_SECRET_KEY
+              })
+              .status(200)
+              .json("Logged in successfully");
 }
 
 
 
-// payload: {
-//     [0]     iss: 'https://accounts.google.com',
-//     [0]     nbf: 1666109741,
-//     [0]     aud: '100947371868-oq3sm0s72shpedmikk08f73nclv64co4.apps.googleusercontent.com',
-//     [0]     sub: '112684181423287567824',
-//     [0]     email: 'ameercm988@gmail.com',
-//     [0]     email_verified: true,
-//     [0]     azp: '100947371868-oq3sm0s72shpedmikk08f73nclv64co4.apps.googleusercontent.com',
-//     [0]     name: 'Ameer C M',
-//     [0]     picture: 'https://lh3.googleusercontent.com/a/ALm5wu110wirdcmzKb_gqYESyyJNRMNoqsFdXOzoYhxXqg=s96-c',
-//     [0]     given_name: 'Ameer',
-//     [0]     family_name: 'C M',
-//     [0]     iat: 1666110041,
-//     [0]     exp: 1666113641,
-//     [0]     jti: '872b10fa460ba382c758260c3c027d270b96d45b'
-//     [0]   }
+module.exports = {
+
+  googleVerify: async (req, res, next) => {
+    try {
+      const token = req?.body?.googleCredentials;
+      if (token) {
+        const client = new googleAuth.OAuth2Client(process.env.GOOGLECLIENTID);
+        const userData = await client.verifyIdToken({
+          idToken: token,
+          audience: process.env.GOOGLECLIENTID,
+        });
+        console.log(userData);
+        if (!userData) {
+          res.status(404).json("no data found");
+        }
+        if (userData) {
+          console.log(userData, "xxx");
+          const existUser = await userModel.findOne({
+            email: userData?.payload?.email,
+          });
+          if (existUser && existUser.emailverified) {
+            
+            tokenGenerator(res, existUser)
+
+          } else {
+            const {
+              given_name: firstname,
+              family_name: lastname,
+              email,
+              email_verified: emailverified,
+            } = userData?.payload;
+
+            userModel
+              .create({ firstname, lastname, email, emailverified })
+              .then((response) => {
+                console.log(response,'rerererere');
+                tokenGenerator(res, response)
+                // res.status(201).json("user created");
+              });
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json("Something went wrong");
+    }
+  },
+
+  signup: async (req, res, next) => {
+    console.log(req.body, "reqbodyfromservertosignup");
+    try {
+      const userData = req?.body; //optional chaining
+
+      //changed googleauthentication to googleverify()
+
+      // if (token) {
+      //   const client = new googleAuth.OAuth2Client(process.env.GOOGLECLIENTID);
+      //   const userData = await client.verifyIdToken({
+      //     idToken: token,
+      //     audience: process.env.GOOGLECLIENTID,
+      //   });
+      //   // console.log(userData);
+
+      //   const {
+      //     given_name: firstname,
+      //     family_name: lastname,
+      //     email,
+      //     email_verified: emailverified,
+      //   } = userData?.payload;
+      //   const user = await userModel.findOne({ email });
+      //   if (user) {
+      //     res.status(403).json("user exist");
+      //     // throw new Error('user already exists')
+      //     // throw {status : 403,message : 'user already exists'}   //throwing error to catch block
+      //   } else {
+      //     userModel
+      //       .create({ firstname, lastname, email, emailverified })
+      //       .then((response) => {
+      //         res.status(201).json("user created");
+      //       });
+      //   }
+
+      if (userData) {
+        let { firstname, lastname, email, password } = userData;
+
+        let userExist = await userModel.findOne({ email });
+        // console.log(userExist);
+        if (userExist) {
+          res.status(403).json("user exists");
+        } else {
+          let bcryptPassword = await bcrypt.hash(password, 10);
+          const user = await userModel.create({
+            firstname,
+            lastname,
+            email,
+            password: bcryptPassword,
+          });
+          console.log("user created", user);
+          if (user) {
+            const emailVerification = await nodeMail(email);
+            console.log(emailVerification);
+            res.status(200).json("Check email for verification");
+          }
+          // res.status(200).json('user created')
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      //   const statuscode = res.status ? res.status : 500;
+      res.status(500).json(error.message);
+    }
+  },
+
+  verify: async (req, res, next) => {
+    const token = req.params.token;
+    let jwtKey = process.env.JWT_SECRET_KEY;
+    try {
+      const verified = verify(token, jwtKey);
+      console.log(verified);
+
+      if (verified) {
+        userModel
+          .findOneAndUpdate(
+            { email: verified.data },
+            { $set: { emailverified: true } }
+          )
+          .then((response) => {
+            res.status(200).json({ tokenVerified: true });
+          });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+
+  reverify: (req, res, next) => {
+    try {
+      console.log(req.body);
+      const credential = req.body.email;
+      nodeMail(credential);
+      res.status(200).json({ emailTokenSentAgain: true });
+    } catch (error) {
+      res.status(500).json("email verification failed");
+    }
+  },
+
+  login: async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      let userData = req.body;
+      if (userData) {
+        const userExist = await userModel.findOne({ email: userData.email });
+        if (userExist && userExist.emailverified) {
+          console.log(userExist);
+          // let bcryptPassword = await bcrypt.hash(userData.password,10)
+          // const user = await userModel.findOne({password : bcryptPassword})
+          const userTrue = await bcrypt.compare(userData.password, userExist.password)
+          if(userTrue) {
+            tokenGenerator(res, userExist)
+            // res.cookie({
+
+            // }).status(200).json('Logged in successfully')
+          } else {
+            res.status(403).json('Credentials not matching')
+          }
+        }else {
+          res.status(403).json('No user exists')
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json("something went wrong")
+    }
+  },
+};

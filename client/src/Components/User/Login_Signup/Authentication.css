@@ -214,3 +214,12 @@ input[type="password"] {
     display: none;
   }
 }
+
+.toast-message {
+  margin-top: 170px;
+  background: #ffffff;
+  color: #EAB10A;
+  font-size: 20px;
+  width: 34vw;
+  padding: 30px 20px;
+}
