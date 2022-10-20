@@ -15,14 +15,14 @@ const tokenGenerator = (res, userData) => {
             });
             res
               .cookie("access_token", token, {
-                httpOnly: true,
+                // httpOnly: true,
                 withCredentials: true,
                 sameSite: "lax",
                 expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
                 // secure : process.env.JWT_SECRET_KEY
               })
               .status(200)
-              .json("Logged in successfully");
+              .json({message : "Logged in successfully", token});
 }
 
 
@@ -201,4 +201,21 @@ module.exports = {
       res.status(500).json("something went wrong")
     }
   },
+  authorisation : async (req, res, next) => {
+    try {
+      const emailVerify = req?.email
+      if(!emailVerify){
+        res.status(403).json('user authorisation failed')
+      }
+    const user =  await userModel.findOne({email : emailVerify})
+    if(user) {
+      res.status(200).json({message : 'user authorisation success', user})
+    } else {
+      res.status(403).json('user authorisation failed')
+    }
+    } catch (error) {
+      res.status(500).json(error.message)
+    }
+    
+  }
 };

@@ -4,8 +4,10 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
 import Authentication from "../Components/User/Login_Signup/Authentication";
 import loginPic from "../Assets/woman-cuddling-with-her-dog.jpeg";
-import "../Components/User/Login_Signup/Authentication.css";
+import {useDispatch} from 'react-redux'
 import { toast } from "react-toastify";
+import {tokenState} from '../Store/AuthSlice'
+import "../Components/User/Login_Signup/Authentication.css";
 
 //In login i used useState
 
@@ -25,6 +27,7 @@ const welcomeNote = (
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const initialState = {
     email: "",
@@ -93,6 +96,7 @@ const LoginPage = () => {
         setinputs(initialState)
         console.log(res.ok);
         if (res.ok) {
+          dispatch(tokenState.setToken(response.token))
           navigate("/", { replace: true });
         }
       }

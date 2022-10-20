@@ -12,10 +12,12 @@ const Layout = (props) => {
       <Header />
       {/* {props.children} */}
       {/* instead of props.children for new updated router-dom 6.4 */}
-      <Outlet/>    
+      <Outlet/>
       <Footer/>
     </>
   );
 };
 
 export default Layout;
+
+

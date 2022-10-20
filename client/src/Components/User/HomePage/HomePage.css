@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+
+.banner-div {
+    background-color: #e4aa09;
+    height: 700px;
+    background-image: url('../../../Assets/banner.jpeg');
+    background-repeat: no-repeat ;
+    background-size: 1000px 700px;
+    background-position:right ;
+}
+
+
+
+.banner-div h1 {
+    
+    font-size: 100px;
+    color: rgb(65, 55, 55);
+    font-family: 'Irish Grover', cursive;
+    letter-spacing: 30px;
+}
+
+.banner-div h3 {
+    
+    font-size: 30px;
+    color: rgb(65, 55, 55);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    letter-spacing: 3px;
+    margin-top: 2%;
+}
+
+.firstTag {
+    margin: 6% 0 0 12%;
+    text-decoration: underline;
+}
+.secondTag {
+    margin-left: 12%;
+}
+
+.button-class {
+    /* margin-left: 12%; */
+    margin: 2% 0 0 12%;
+    /* height: 100px; */
+}
+
+.services-section {
+    background-color: #ffffff;
+    height: 700px;
+}

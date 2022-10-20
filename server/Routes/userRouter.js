@@ -1,4 +1,5 @@
-const { signup, verify, reverify, login, googleVerify } = require("../Controller/userController");
+const { signup, verify, reverify, login, googleVerify, authorisation } = require("../Controller/userController");
+const userVerify = require("../Middleware/middleWare");
 
 const router = require("express").Router();
 
@@ -10,6 +11,7 @@ router.get('/verify/:token', verify)
 
 router.patch('/reverify', reverify)
 
+router.get('/authorise', userVerify, authorisation)
 
 router.post('/login', login)
 
