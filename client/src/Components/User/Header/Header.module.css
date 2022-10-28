@@ -25,15 +25,16 @@ header {
 }
 
 header img {
-	height: 35px;
+	max-height: 25px;
 	/* padding-top: 30px; */
 	margin-left: 30px;
+	
+	
 }
 
 @media (max-width: 330px) {
 	header img {
 		display: none;
-		
 	}
 }
 
@@ -41,14 +42,14 @@ header h4 {
 	font-size: 1.1rem;
 	font-weight: 600;
 	color: #2c2d2f;
-	margin-left: 185px;
+	margin-left: 2rem;
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
 	h1 {
 		display: none;
 	}
-}
+} */
 
 /* header .header-top {
 	background-color: #828282;

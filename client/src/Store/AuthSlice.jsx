@@ -17,16 +17,14 @@ function getCookie(cookie)  {
             return c.substring(name.length, c.length)
         } 
     } 
-    return ''
+    return ""
 }
 
 console.log(token)
 
-let blog = true
-
 const AuthSlice = createSlice({
     name : 'slicer',
-    initialState : {token : token ? token : '', blog : blog ? true : false},
+    initialState : {token : token ? token : ''},
     reducers : {
         setToken : (state, action) => {
             console.log(action.payload,'payload');

@@ -3,9 +3,12 @@
 .banner-div {
     background-color: #e4aa09;
     height: 700px;
+    /* height: 100vh; */
     background-image: url('../../../Assets/banner.jpeg');
+    
     background-repeat: no-repeat ;
     background-size: 1000px 700px;
+    /* background-size: 50% 100%; */
     background-position:right ;
 }
 
@@ -20,12 +23,72 @@
 }
 
 .banner-div h3 {
-    
+    position: relative;
     font-size: 30px;
     color: rgb(65, 55, 55);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     letter-spacing: 3px;
     margin-top: 2%;
+}
+
+@media only screen and (max-width : 1030px) {
+    .banner-div h3 {
+        /* font-size: large; */
+        display: none;
+    }  
+    .banner-div h1 {
+        font-size: xx-large;
+        letter-spacing: 20px;
+        /* margin-top: 50px; */
+        position: relative;
+    } 
+    .banner-div {
+        height: 350px;
+        /* background-size: 500px 350px;  */
+        background-size: contain;
+        /* font-size: small; */
+    }
+}
+
+@media only screen and (max-width : 768px) {
+    .banner-div h3 {
+        font-size: small;
+    }  
+    .banner-div h1 {
+        font-size: medium;
+        letter-spacing: 20px;
+        /* margin-top: 50px; */
+        position: relative;
+    } 
+    .banner-div {
+        height: 350px;
+        /* background-size: 500px 350px;  */
+        background-size: contain;
+        /* font-size: small; */
+    }
+}
+@media only screen and (max-width : 430px) {
+    .banner-div h3 {
+        /* font-size: x-small; */
+        display: none;
+    }  
+    .banner-div h1 {
+        font-size: x-small;
+        letter-spacing: 10px;
+        /* margin-top: 60px; */
+
+    } 
+    .banner-div {
+        height: 180px;
+        /* background-size: 250px 180px;  */
+        background-size: contain;
+        /* font-size: small; */
+    }
+    .button-class {
+        margin: 0%;
+        /* size: 10px; */
+        height: 10px;
+    }
 }
 
 .firstTag {
@@ -39,10 +102,13 @@
 .button-class {
     /* margin-left: 12%; */
     margin: 2% 0 0 12%;
+    /* @media max-width:425px {
+        margin : 0%
+    } */
     /* height: 100px; */
 }
 
 .services-section {
     background-color: #ffffff;
-    height: 700px;
+    height: 80vh;
 }

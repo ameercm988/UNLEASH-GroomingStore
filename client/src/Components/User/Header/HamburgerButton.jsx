@@ -8,6 +8,7 @@ import {  useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { tokenState } from "../../../Store/AuthSlice";
 import LoginPage from "../../../Pages/LoginPage";
+import { toast } from "react-toastify";
 
 
 export default function MenuPopupState() {
@@ -15,12 +16,13 @@ export default function MenuPopupState() {
   const dispatch = useDispatch()
 
   const { token } = useSelector((state) => state.auth);
-  // console.log(token);
+  console.log(token, 'token in state');
 
   const onLogout = (popupState) => {
     document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     dispatch(tokenState.setToken(''))
     popupState.close()
+    toast('Logged out')
   }
 
   const onNavigate = (popupState, to) => {
@@ -46,7 +48,7 @@ export default function MenuPopupState() {
             <AiOutlineMenu />
           </Button>
           <Menu {...bindMenu(popupState)}>
-            {token ? (
+            {token ? (  
               <MenuItem onClick={() => onLogout(popupState)}>Logout</MenuItem>
             ) : (
               <MenuItem onClick={() => onNavigate(popupState, '/login')}>Login</MenuItem>

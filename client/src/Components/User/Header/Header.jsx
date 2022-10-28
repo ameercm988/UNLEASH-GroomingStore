@@ -2,15 +2,17 @@ import React from 'react'
 import styles from './Header.module.css'
 import MenuPopupState from './HamburgerButton';
 import logo from "../../../Assets/Unleash+logo.png";
-import {FaPhoneAlt, FaHamburger, FaEnvelope, FaSearch, FaFacebook, FaTwitter, FaInstagram} from 'react-icons/fa'
+import {FaPhoneAlt, FaEnvelope, FaSearch, FaFacebook, FaTwitter, FaInstagram} from 'react-icons/fa'
 import { Link } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
 const Header = () => {
   return (
-    <>
+	<Grid container>
+    <Grid item xs={12} sm={12} lg={12}>
         <header id="header">
 		{/* <div className={styles['header-top']}> */}
-		<div style={{display:'flex',marginRight:'900px'}}>
+		<div style={{display:'flex'}}>
 		<h4><FaPhoneAlt/> +91 9XXXXXXXX1</h4>
 		<h4><FaEnvelope/> unleash.com</h4>
 		</div>
@@ -34,18 +36,21 @@ const Header = () => {
 		<nav id="nav-bar">
 		<img src={logo}/>
 			<ul>
-				<Link to={'/'}>
-				<li><a className={styles['nav-link']} href="#speed">HOME</a></li>
-				</Link>
-				<li><a className={styles['nav-link']} href="#display">APPOINTMENTS</a></li>
-				<li><a className={styles['nav-link']} href="#camera">SERVICES</a></li>
-				<li><a className={styles['nav-link']} href="#design">BLOG</a></li>
-				<li><a className={styles['nav-link']} href="#oxygenos">CONTACT US</a></li>
+				
+				<li><Link to={'/'} className={styles['nav-link']} >HOME</Link></li>
+				
+				<li><Link to={'/appointments'} className={styles['nav-link']} >APPOINTMENTS</Link></li>
+				
+				<li><Link to={'/services'} className={styles['nav-link']} >SERVICES</Link></li>
+				
+				<li><a className={styles['nav-link']} >BLOG</a></li>
+				<li><a className={styles['nav-link']} >CONTACT US</a></li>
 			</ul>
 			{/* <button><span></span>Buy now</button> */}
 		</nav>
 	</header>
-    </>
+    </Grid>
+	</Grid>
   )
 }
 

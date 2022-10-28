@@ -1,56 +1,51 @@
 const userModel = require("../Model/userModel");
+const bookingModel = require("../Model/bookingModel");
 const bcrypt = require("bcryptjs");
 const googleAuth = require("google-auth-library");
 const nodeMail = require("../Config/nodeMailer");
 const { verify, sign } = require("jsonwebtoken");
 
-
-
 const tokenGenerator = (res, userData) => {
   let jwtKey = process.env.JWT_SECRET_KEY;
-            let data = userData?.email;
+  let data = userData?.email;
 
-            const token = sign({ data }, jwtKey, {
-              expiresIn: 60 * 60 * 24 * 1000,
-            });
-            res
-              .cookie("access_token", token, {
-                // httpOnly: true,
-                withCredentials: true,
-                sameSite: "lax",
-                expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-                // secure : process.env.JWT_SECRET_KEY
-              })
-              .status(200)
-              .json({message : "Logged in successfully", token});
-}
-
-
+  const token = sign({ data }, jwtKey, {
+    expiresIn: 60 * 60 * 24 * 1000,
+  });
+  res
+    .cookie("access_token", token, {
+      // httpOnly: true,
+      withCredentials: true,
+      sameSite: "lax",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      // secure : process.env.JWT_SECRET_KEY
+    })
+    .status(200)
+    .json({ message: "Logged in successfully", token });
+};
 
 module.exports = {
-
   googleVerify: async (req, res, next) => {
     try {
       const token = req?.body?.googleCredentials;
+      // console.log(token, 'from backend google auth');
       if (token) {
         const client = new googleAuth.OAuth2Client(process.env.GOOGLECLIENTID);
+        // console.log(client, ' client details from auth2client');
         const userData = await client.verifyIdToken({
           idToken: token,
           audience: process.env.GOOGLECLIENTID,
         });
-        console.log(userData);
+        // console.log(userData,'data from googleauth after sending token');
         if (!userData) {
           res.status(404).json("no data found");
         }
         if (userData) {
-          console.log(userData, "xxx");
           const existUser = await userModel.findOne({
             email: userData?.payload?.email,
           });
           if (existUser && existUser.emailverified) {
-            
-            tokenGenerator(res, existUser)
-
+            tokenGenerator(res, existUser);
           } else {
             const {
               given_name: firstname,
@@ -62,8 +57,8 @@ module.exports = {
             userModel
               .create({ firstname, lastname, email, emailverified })
               .then((response) => {
-                console.log(response,'rerererere');
-                tokenGenerator(res, response)
+                // console.log(response,'rerererere');
+                tokenGenerator(res, response);
                 // res.status(201).json("user created");
               });
           }
@@ -177,45 +172,72 @@ module.exports = {
     // console.log(req.body);
     try {
       let userData = req.body;
+      console.log(userData);
       if (userData) {
         const userExist = await userModel.findOne({ email: userData.email });
         if (userExist && userExist.emailverified) {
           console.log(userExist);
           // let bcryptPassword = await bcrypt.hash(userData.password,10)
           // const user = await userModel.findOne({password : bcryptPassword})
-          const userTrue = await bcrypt.compare(userData.password, userExist.password)
-          if(userTrue) {
-            tokenGenerator(res, userExist)
+          const userTrue = await bcrypt.compare(
+            userData.password,
+            userExist.password
+          );
+          if (userTrue) {
+            tokenGenerator(res, userExist);
             // res.cookie({
 
             // }).status(200).json('Logged in successfully')
           } else {
-            res.status(403).json('Credentials not matching')
+            res.status(403).json("Credentials not matching");
           }
-        }else {
-          res.status(403).json('No user exists')
+        } else {
+          res.status(403).json("No user exists");
         }
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json("something went wrong")
+      res.status(500).json("something went wrong");
     }
   },
-  authorisation : async (req, res, next) => {
+  authorisation: async (req, res, next) => {
     try {
-      const emailVerify = req?.email
-      if(!emailVerify){
-        res.status(403).json('user authorisation failed')
+      const emailVerify = req?.email;
+      if (!emailVerify) {
+        res.status(403).json("user authorisation failed");
       }
-    const user =  await userModel.findOne({email : emailVerify})
-    if(user) {
-      res.status(200).json({message : 'user authorisation success', user})
-    } else {
-      res.status(403).json('user authorisation failed')
-    }
+      const user = await userModel.findOne({ email: emailVerify });
+      if (user) {
+        res.status(200).json({ message: "user authorisation success", user });
+      } else {
+        res.status(403).json("user authorisation failed");
+      }
     } catch (error) {
-      res.status(500).json(error.message)
+      res.status(500).json(error.message);
     }
-    
-  }
+  },
+  appointmentBooking: async (req, res, next) => {
+    try {
+      console.log(req.body);
+      const { date, time } = req?.body;
+      const unavailable = await bookingModel.findOne({$and : [{ bookingTime: time }, { bookingDate : date}, {booked : true}]});
+      if (unavailable) {
+        res.status(503).json("Current slot is already booked,Try nearby dates");
+      } else {
+        const booked = await bookingModel.create({
+          bookingDate : date,
+          bookingTime : time,
+          booked: true,
+        });
+        console.log(booked, "booking success");
+        if (booked) {
+          res.status(201).json("slot booking is successful");
+        } else {
+          throw new Error;
+        }
+      }
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  },
 };

@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { ToastContainer, toast} from 'react-toastify'
+import { ToastContainer} from 'react-toastify'
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import 'react-toastify/dist/ReactToastify.css';
 
-const Layout = (props) => {
+const Layout = () => {
   return (
     <>
     <ToastContainer />

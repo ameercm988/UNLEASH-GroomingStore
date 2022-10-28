@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import {tokenState} from '../Store/AuthSlice'
 import "../Components/User/Login_Signup/Authentication.css";
 
-//In login i used useState
+//In login useState is used 
 
 // dynamicProps
 const authTitle = (
@@ -26,6 +26,7 @@ const welcomeNote = (
 );
 
 const LoginPage = () => {
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -92,9 +93,9 @@ const LoginPage = () => {
         });
         const response = await res.json();
         toast(response);
-        console.log(response);
+        console.log(response.token,'response from login');
         setinputs(initialState)
-        console.log(res.ok);
+        // console.log(res.ok);
         if (res.ok) {
           dispatch(tokenState.setToken(response.token))
           navigate("/", { replace: true });

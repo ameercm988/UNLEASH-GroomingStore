@@ -1,0 +1,22 @@
+.container {
+    height: 55vh;
+    /* display: flex; */
+}
+
+.main {
+    min-height: 55vh;
+    margin-top: 5rem;
+    display: contents;
+    justify-content: center;
+    color: black;
+}
+.main h2 {
+    color: #e4aa09;
+    text-decoration: underline;
+}
+
+.appcontent-div {
+    max-width: 50rem;
+    margin: 5rem;
+    background-color: rgb(239, 239, 239);
+}
