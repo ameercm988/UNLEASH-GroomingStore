@@ -8,7 +8,7 @@ import { Grid } from '@material-ui/core';
 
 const Header = () => {
   return (
-	<Grid container>
+	<Grid container className='place-items-center'>
     <Grid item xs={12} sm={12} lg={12}>
         <header id="header">
 		{/* <div className={styles['header-top']}> */}

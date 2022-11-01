@@ -42,6 +42,7 @@ const Authentication = (props) => {
                 <span>
                   <img src="https://imgur.com/mPBRdQt.png" alt=""/>
                 </span> */}
+                
               </div>
             </div>
           </div>

@@ -74,7 +74,8 @@ const reducerFunction = (state, action) => {
 };
 
 const SignUp = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const initialState = {
     firstname: "",
     lastname: "",
@@ -151,7 +152,6 @@ const SignUp = () => {
       ) {
         toast("Please fill all the fields");
       } else {
-        
         const userData = JSON.stringify(inputs);
         const res = await fetch("/api/users/signup", {
           method: "POST",
@@ -161,12 +161,12 @@ const SignUp = () => {
         let resData = await res.json();
         toast(resData, {
           position: toast.POSITION.TOP_RIGHT,
-          className:"toast-message"
+          className: "toast-message",
         });
         console.log(resData, "resssssdaaattaaaa");
         setInputs(initialState);
-        if(res.ok){
-          navigate('/login', {replace : true})
+        if (res.ok) {
+          navigate("/login", { replace: true });
         }
       }
     } catch (error) {

@@ -10,10 +10,10 @@ function getCookie(cookie)  {
     let cookies = document.cookie.split(';')
     for(let i = 0; i < cookies.length; i++) {
         let c = cookies[i]
-        while (c.charAt(0) == ' ') {
+        while (c.charAt(0) === ' ') {
             c = c.substring(1)
         }
-        if(c.indexOf(name) == 0) {
+        if(c.indexOf(name) === 0) {
             return c.substring(name.length, c.length)
         } 
     } 
@@ -33,7 +33,7 @@ const AuthSlice = createSlice({
     }
 
 })
-export let tokenState = AuthSlice.actions
+export const tokenState = AuthSlice.actions
 export default AuthSlice;
 
 

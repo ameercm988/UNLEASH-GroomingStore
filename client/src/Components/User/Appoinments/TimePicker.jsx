@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { FaHandPointDown, FaHandPointLeft } from "react-icons/fa";
 
-const TimePicker = ({ fetchTime }) => {
-    const initialState = {index : null, buttonStyle : false}
-//   const [time, setTime] = useState("");
+const TimePicker = ({ fetchTime, date }) => {
+  console.log(date, "passed date");
+  const initialState = { index: null, buttonStyle: false };
+  //   const [time, setTime] = useState("");
   const [state, setState] = useState(initialState);
-//   console.log(state, "b4 click");
+  //   console.log(state, "b4 click");
 
   const clickHandler = (elem, index) => {
     // const slot = e.target.innerText
     // console.log(slot);
     // setTime(elem);
     console.log(index);
-    setState({index : index, buttonStyle : true})
+    setState({ index: index, buttonStyle: true });
     // index.setButtonStyle(true)
     // setButtonStyle(index = true)
     // console.log(state, "after click");
@@ -46,7 +48,17 @@ const TimePicker = ({ fetchTime }) => {
 
   return (
     <div className="">
-      <p className="m-9 text-xs lg:text-xl">Please pick a date</p>
+      {date ? (
+        <p className="m-9 text-xs lg:text-xl flex">
+          <FaHandPointDown />
+          &nbsp;Choose a time slot
+        </p>
+      ) : (
+        <p className="m-9 text-xs lg:text-xl flex">
+          <FaHandPointLeft /> &nbsp;Please pick a date
+        </p>
+      )}
+
       <div className="grid lg:grid-cols-4 gap-4 m-12 sm:grid-cols-3">
         {timeList}
       </div>

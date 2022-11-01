@@ -47,7 +47,7 @@ module.exports = {
 
   getServices : async (req, res, next) => {
     try {
-        console.log('in service page');
+        // console.log('in service page');
         const services = await serviceModel.find()
         res.status(201).json({fetched : true, services})
     } catch (error) {

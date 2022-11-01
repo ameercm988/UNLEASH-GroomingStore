@@ -43,6 +43,7 @@ header h4 {
 	font-weight: 600;
 	color: #2c2d2f;
 	margin-left: 2rem;
+	display: flex;
 }
 
 /* @media (max-width: 600px) {

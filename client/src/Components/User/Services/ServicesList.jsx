@@ -1,9 +1,12 @@
-import { Box, Container, Grid, Button } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import "./ServicesList.css";
-import React, {useState, useEffect} from "react";
+import React, { useEffect } from "react";
 import ServiceItems from "./ServiceItems";
+import { useSelector, useDispatch } from "react-redux";
+import { getServices } from "../../../Store/serviceSlice";
 
-const ServicesList =  () => {
+const ServicesList = ({fetchId}) => {
+  const dispatch = useDispatch();
 
   // const addServices = async () => {
   //   const res = await fetch('/api/admin/addservices',{
@@ -15,48 +18,71 @@ const ServicesList =  () => {
   // console.log(response)
   // }
 
-  const [service, setService] = useState([])
+  const { services } = useSelector((state) => state.service);
+  console.log(services, "useslector");
 
-  const getServices = async () => {
-    const res = await fetch('/api/admin/services')
-    const response = await res.json(res)
-    setService(response.services)
-    // console.log(response.services)
-  }
+  // before keeping getservices fn in redux>>>>>>>>>>>>>>>>>>
 
+  // const [service, setService] = useState([])
 
- const content1 = service.slice(0,2).map((elem,index) => {
-  // console.log(elem);
-  return (
-  <ServiceItems servicetype={elem.servicetype} description={elem.description} index={index} key={elem._id}/>  //if key is not there all the components will render on any particular component updation
-  )
-})
+  //   const getServices = async () => {
+  //   const res = await fetch('/api/admin/services')
+  //   const response = await res.json(res)
 
-const content2 = service.slice(2,4).map((elem, index) => {
-  return(
-    <ServiceItems servicetype={elem.servicetype} description={elem.description} index={index+2} key={elem._id}/>
-  )
-})
-// console.log(content1,'mapped service')
-   
+  //   setService(response.services)
+  //   // console.log(response.services)
+  // }
+
+  const content1 = services.slice(0, 2).map((elem, index) => {
+    // console.log(elem);
+    return (
+      <ServiceItems
+        servicetype={elem.servicetype}
+        description={elem.description}
+        index={index}
+        key={elem._id}
+        id={elem._id}
+        fetchId={fetchId}
+      /> //if key is not there all the components will render on any particular component updation
+    );
+  });
+
+  const content2 = services.slice(2, 4).map((elem, index) => {
+    return (
+      <ServiceItems
+        servicetype={elem.servicetype}
+        description={elem.description}
+        index={index + 2}
+        key={elem._id}
+        id={elem._id}
+      fetchId={fetchId}
+      />
+    );
+  });
+  // console.log(content1,'mapped service')
+
   useEffect(() => {
     // addServices()
-    getServices()
-  }, [])
-  
+    // getServices()
+    dispatch(getServices());
+  }, []);
 
   return (
-    <Container className="main" maxWidth="lg">
+    <Container maxWidth="lg">
       <center>
-        <h1>OUR SERVICES</h1>
-        <h4>
+        <h1 className="text-4xl underline my-4 text-stone-500">OUR SERVICES</h1>
+        <h4 className="text-xl my-6">
           " A well-groomed dog is a happy dog and a happy dog is a healthy dog "
         </h4>
       </center>
 
-      <Grid className="content-div" item sm={12} style={{ minHeight: "70vh" }}>
-        <Grid className="content-div-start" item sm={4} style={{ minHeight: "50vh" }}>
-
+      <Grid className="content-div" item sm={12} style={{ height: "70vh" }}>
+        <Grid
+          className="content-div-start"
+          item
+          sm={4}
+          style={{ height: "50vh" }}
+        >
           {content1}
 
           {/* <Box className="content" spacing={2}>
@@ -73,7 +99,6 @@ const content2 = service.slice(2,4).map((elem, index) => {
             </Grid>
           </Box> */}
 
-
           {/* <Box className="content">
             <Grid sm={2}>
               <h2>3</h2>
@@ -87,13 +112,14 @@ const content2 = service.slice(2,4).map((elem, index) => {
               <Button variant="contained">MORE INFO</Button>
             </Grid>
           </Box> */}
-
-
         </Grid>
         <Grid className="empty-div" item sm={4}></Grid>
-        <Grid className="content-div-end" item sm={4} style={{ minHeight: "50vh" }}>
-
-
+        <Grid
+          className="content-div-end"
+          item
+          sm={4}
+          style={{ minHeight: "50vh" }}
+        >
           {content2}
 
           {/* <Box className="content">
@@ -122,8 +148,6 @@ const content2 = service.slice(2,4).map((elem, index) => {
               <Button variant="contained">MORE INFO</Button>
             </Grid>
           </Box> */}
-
-
         </Grid>
       </Grid>
     </Container>
